@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  app:
+    container_name: go-clean-architecture-translate
+    image: 01092002/go-clean-architecture-translate:1.0.0
+    depends_on:
+      - mysql
+    environment:
+      MYSQL_DSN: ${MYSQL_DSN_PROD}
+      MYSQL_USER: ${MYSQL_USER_PROD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD_PROD}
+      MYSQL_HOST: ${MYSQL_HOST_PROD}
+      MYSQL_PORT: ${MYSQL_PORT_PROD}
+    ports:
+      - "8080:8080"
+  mysql:
+    container_name: go-clean-architecture-translate-mysql
+    image: mysql:8.0.36
+    ports:
+      - "3306:3306"
+    volumes:
+      - "./data.sql:/docker-entrypoint-initdb.d/data.sql"
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE_PROD}
+      MYSQL_USER: ${MYSQL_USER_PROD}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD_PROD}

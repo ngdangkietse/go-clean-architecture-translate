@@ -1,0 +1,12 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: go-clean-architecture-translate-configmap
+data:
+  MYSQL_HOST: "go-clean-architecture-translate-service-go-clean-architecture.a.aivencloud.com"
+  MYSQL_PORT: "20487"
+  MYSQL_USER: "avnadmin"
+  MYSQL_PASSWORD: "AVNS_pxbe8n7llxZmgSJ_Lox"
+  MYSQL_DATABASE: "defaultdb"
+  MYSQL_DSN: "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local&ssl-mode=REQUIRED"

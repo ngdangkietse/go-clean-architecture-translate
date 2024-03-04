@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"go-clean-architecture-translate/controllers/httpapi"
 	"go-clean-architecture-translate/infras/googlesv"
 	mysqlRepo "go-clean-architecture-translate/infras/mysql"
@@ -39,12 +38,17 @@ func main() {
 
 func connectDBWithRetry(times int) (*gorm.DB, error) {
 	var e error
-	if err := godotenv.Load(".env"); err != nil {
-		return nil, err
-	}
+
 	for i := 0; i < times; i++ {
-		dsn := os.Getenv("MYSQL_DSN")
-		db, err := gorm.Open(mysql.Open(fmt.Sprintf(dsn, os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD"), os.Getenv("MYSQL_HOST"), os.Getenv("MYSQL_PORT"), os.Getenv("MYSQL_DATABASE"))), &gorm.Config{})
+		dsn := getEnv("MYSQL_DNS", "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local")
+		db, err := gorm.Open(mysql.Open(fmt.Sprintf(
+			dsn,
+			getEnv("MYSQL_USER", "ngdangkiet"),
+			getEnv("MYSQL_PASSWORD", "root"),
+			getEnv("MYSQL_HOST", "localhost"),
+			getEnv("MYSQL_PORT", "3306"),
+			getEnv("MYSQL_DATABASE", "go_clean_architecture_translate_db"))),
+			&gorm.Config{})
 		if err == nil {
 			return db, nil
 		}
@@ -52,4 +56,11 @@ func connectDBWithRetry(times int) (*gorm.DB, error) {
 		time.Sleep(time.Second * 2)
 	}
 	return nil, e
+}
+
+func getEnv(key, defaultValue string) string {
+	if value, ok := os.LookupEnv(key); ok {
+		return value
+	}
+	return defaultValue
 }
