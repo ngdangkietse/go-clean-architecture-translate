@@ -12,6 +12,7 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD_PROD}
       MYSQL_HOST: ${MYSQL_HOST_PROD}
       MYSQL_PORT: ${MYSQL_PORT_PROD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "8080:8080"
   mysql:
