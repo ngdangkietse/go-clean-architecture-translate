@@ -20,6 +20,7 @@ services:
       - "8080:8080"
     networks:
       - go-clean-architecture-translate-network
+
   mysql:
     container_name: go-clean-architecture-translate-mysql
     image: mysql:${MYSQL_VERSION}
@@ -35,6 +36,19 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     networks:
       - go-clean-architecture-translate-network
+
+  jenkins:
+    container_name: go-clean-architecture-translate-jenkins
+    image: jenkins/jenkins:lts
+    privileged: true
+    user: root
+    ports:
+      - "8081:8080"
+      - "50000:50000"
+    volumes:
+      - ./jenkins:/var/jenkins_home
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/local/bin/docker
 
 networks:
   go-clean-architecture-translate-network:
