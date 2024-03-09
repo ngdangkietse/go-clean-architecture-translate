@@ -6,22 +6,24 @@ pipeline {
 
     environment {
         REPO_URL = "https://github.com/ngdangkietse/go-clean-architecture-translate.git"
-//         GIT_CREDENTIALS = "Git_Credentials"
+        GIT_CREDENTIALS = "Git_Credentials"
         DOCKER_CREDENTIALS = credentials('Docker_Credentials')
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout([
-                    $class: 'GitSCM',
-                    branches: [[name: '*/main']],
-                    extensions: [],
-                    userRemoteConfigs: [[
-                        url: env.REPO_URL
-//                         credentialsId: env.GIT_CREDENTIALS
-                    ]]
-                ])
+                script {
+                   checkout([
+                        $class: 'GitSCM',
+                        branches: [[name: '*/main']],
+                        extensions: [],
+                        userRemoteConfigs: [[
+                            url: env.REPO_URL,
+                            credentialsId: env.GIT_CREDENTIALS
+                        ]]
+                   ])
+                }
             }
         }
 
