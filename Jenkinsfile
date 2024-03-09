@@ -6,7 +6,7 @@ pipeline {
 
     environment {
         REPO_URL = "https://github.com/ngdangkietse/go-clean-architecture-translate.git"
-        GIT_CREDENTIALS = "Git_Credentials"
+//         GIT_CREDENTIALS = "Git_Credentials"
         DOCKER_CREDENTIALS = credentials('Docker_Credentials')
     }
 
@@ -18,8 +18,8 @@ pipeline {
                     branches: [[name: '*/main']],
                     extensions: [],
                     userRemoteConfigs: [[
-                        url: env.REPO_URL,
-                        credentialsId: env.GIT_CREDENTIALS
+                        url: env.REPO_URL
+//                         credentialsId: env.GIT_CREDENTIALS
                     ]]
                 ])
             }
