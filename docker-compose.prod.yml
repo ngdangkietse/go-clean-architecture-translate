@@ -6,6 +6,7 @@ services:
     image: 01092002/go-clean-architecture-translate:1.0.0
     depends_on:
       - mysql
+    restart: unless-stopped
     environment:
       MYSQL_DSN: ${MYSQL_DSN_PROD}
       MYSQL_USER: ${MYSQL_USER_PROD}
@@ -20,6 +21,7 @@ services:
     image: mysql:8.0.36
     ports:
       - "3306:3306"
+    restart: unless-stopped
     volumes:
       - "./data.sql:/docker-entrypoint-initdb.d/data.sql"
     environment:

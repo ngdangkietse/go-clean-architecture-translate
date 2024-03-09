@@ -9,6 +9,7 @@ import (
 	"go-clean-architecture-translate/services"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"log"
 	"os"
 	"time"
 )
@@ -40,15 +41,17 @@ func connectDBWithRetry(times int) (*gorm.DB, error) {
 	var e error
 
 	for i := 0; i < times; i++ {
-		dsn := getEnv("MYSQL_DNS", "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local")
-		db, err := gorm.Open(mysql.Open(fmt.Sprintf(
-			dsn,
+		dsn := fmt.Sprintf(
+			getEnv("MYSQL_DSN", "%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local"),
 			getEnv("MYSQL_USER", "ngdangkiet"),
 			getEnv("MYSQL_PASSWORD", "root"),
-			getEnv("MYSQL_HOST", "localhost"),
+			getEnv("MYSQL_HOST", "mysql"),
 			getEnv("MYSQL_PORT", "3306"),
-			getEnv("MYSQL_DATABASE", "go_clean_architecture_translate_db"))),
-			&gorm.Config{})
+			getEnv("MYSQL_DATABASE", "go_clean_architecture_translate_db"))
+
+		log.Print(fmt.Sprintf("Connecting to DB: %s", dsn))
+
+		db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 		if err == nil {
 			return db, nil
 		}

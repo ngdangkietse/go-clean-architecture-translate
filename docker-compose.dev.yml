@@ -8,20 +8,24 @@ services:
       context: .
     depends_on:
       - mysql
+    restart: unless-stopped
     environment:
       MYSQL_DSN: ${MYSQL_DSN}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_HOST: ${MYSQL_HOST}
+      MYSQL_HOST: ${MYSQL_HOST_DOCKER}
       MYSQL_PORT: ${MYSQL_PORT}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
     ports:
       - "8080:8080"
+    networks:
+      - go-clean-architecture-translate-network
   mysql:
     container_name: go-clean-architecture-translate-mysql
     image: mysql:${MYSQL_VERSION}
     ports:
       - "${MYSQL_PORT}:3306"
+    restart: unless-stopped
     volumes:
       - "./data.sql:/docker-entrypoint-initdb.d/data.sql"
     environment:
@@ -29,3 +33,9 @@ services:
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+    networks:
+      - go-clean-architecture-translate-network
+
+networks:
+  go-clean-architecture-translate-network:
+    driver: bridge
